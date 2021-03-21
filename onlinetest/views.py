@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from onlinetest.models import Question, Answer, Profile, Config
+from onlinetest.models import Question, Answer, Profile, Config, Event
 from onlinetest.forms import ProfileForm, AnswerForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
@@ -27,6 +27,8 @@ def save_profile(backend, user, response, *args, **kwargs):
 
 def index(req):
     config = Config.objects.all().first()
+    event = Event.objects.all().first()
+    event_name = Event.objects.all().first().__str__()
     time_left = int(config.start_time.timestamp())
     image = None
     if req.user.is_authenticated:
@@ -52,6 +54,8 @@ def index(req):
         return render(req, 'onlinetest/index.html', ctx)
     ctx['time_left'] = int(config.end_time.timestamp())
     ctx['started'] = True
+    ctx['event'] = event
+    ctx['event_name'] = event_name
     return render(req, 'onlinetest/index.html', ctx)
 
 
@@ -65,7 +69,7 @@ def logout_user(req):
 def questions(req):
     profile = Profile.objects.get(user=req.user)
     time_left = (Config.objects.all().first().end_time - timezone.now()).total_seconds()
-
+    event = Event.objects.all().first()
     if timezone.now() < Config.objects.all().first().start_time:
         return redirect('/')
     if time_left <= 0:
@@ -81,7 +85,7 @@ def questions(req):
             question.answer = None
 
     name = profile.full_name
-    ctx = {'questions': questions, 'user': name, 'time_left': time_left, 'image': profile.image}
+    ctx = {'questions': questions, 'user': name, 'time_left': time_left, 'image': profile.image, 'event': event}
     return render(req, 'onlinetest/questions.html', ctx)
 
 
@@ -119,12 +123,12 @@ def rules(req):
         if form.is_valid:
             full_name = req.POST['full_name']
             phone = req.POST['phone']
-            rollno = req.POST['rollno']
+            teamname = req.POST['teamname']
             user = User.objects.get(id=req.user.id)
             profile = Profile.objects.get(user=user)
             profile.full_name = full_name
             profile.phone = phone
-            profile.rollno = rollno
+            profile.teamname = teamname
             profile.save()
             return redirect('/questions/')
     else:
@@ -141,12 +145,14 @@ def finish(req):
     profile = Profile.objects.get(user=req.user)
     discord_link = Config.objects.all().first().discord_link
     name = profile.full_name
-    ctx = {'user': name, 'image': profile.image, 'discord': discord_link}
+    event = Event.objects.all().first()
+    ctx = {'user': name, 'image': profile.image, 'discord': discord_link, 'event': event}
     return render(req, 'onlinetest/finish.html', ctx)
 
 
 def results(req):
     image = None
+    event = Event.objects.all().first()
     if req.user.is_authenticated:
         image = Profile.objects.get(user=req.user).image
 
@@ -164,7 +170,7 @@ def results(req):
 
         ctx['profiles'] = profiles
         ctx['count'] = len(profiles)
-
+    ctx['event'] = event
     return render(req, 'onlinetest/results.html', ctx)
 
 

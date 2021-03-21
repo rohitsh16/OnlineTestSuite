@@ -3,9 +3,10 @@
 {% block content %}
 
 {% load static %}
+
 <style>
     body {
-        background: url("{% static 'onlinetest/bg2.jpg' %}") no-repeat;
+        background-image: "url({{ event.background.url }})";
         color: rgb(250, 239, 239);
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -36,11 +37,11 @@
                 Finish
             </button>
         </div>
-        <div class="footer-like">
+        <!-- <div class="footer-like">
             <p>Have you joined our Discord yet?
                 <a href="{{ discord }}">Click here join</a>
             </p>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -53,7 +54,9 @@
     }
 </style>
 
-
+<script> 
+    document.body.style.backgroundImage="url({{ event.background.url }})";
+</script>
 
 <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'onlinetest/css/footer.css' %}">

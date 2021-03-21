@@ -13,7 +13,7 @@ function update_time(){
 }
 
 var utimer;
-
+var words;
 //this should be called only when page loads
 async function start_timer_updater(init_time) {
   //await sleep(5000);
@@ -83,7 +83,7 @@ class TypeWriter {
   
   document.addEventListener("DOMContentLoaded", () => {
     const txtElement = document.querySelector(".txt-type");
-    const words = ["Crack your way into JCC!"];
+    words = ["Crack your way into JCC!"];
     const wait = txtElement.getAttribute("data-wait");
     const typeWriter = new TypeWriter(txtElement, words, wait);
   });

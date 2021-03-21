@@ -11,7 +11,8 @@ class ProfileForm(forms.ModelForm):
         fields = [
             'full_name',
             'phone',
-            'rollno'
+            # 'rollno'
+            'teamname'
         ]
 
 

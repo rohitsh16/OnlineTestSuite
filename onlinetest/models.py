@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 class Question(models.Model):
     title = HTMLField()
     image = models.ImageField(upload_to="question_images/", null=True, blank=True)
+    audio = models.FileField(upload_to='media/audios', blank=True)
 
     def __str__(self):
         return BeautifulSoup(self.title).get_text()
@@ -31,7 +32,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=14)
-    rollno = models.CharField(max_length=10)
+    # rollno = models.CharField(max_length=10)
+    teamname = models.CharField(max_length=200, blank=True, null=True)
     image = models.CharField(max_length=200, blank=True)
 
     # for admin uses
@@ -55,3 +57,21 @@ class Config(models.Model):
 
     def __str__(self):
         return "Project Wide Settings"
+
+
+
+class Event(models.Model):
+    name = HTMLField()
+    rule = HTMLField(blank=True)
+    tagline = models.TextField(blank=True, null=True, help_text="Logo")
+    image = models.ImageField(upload_to="event_images/", null=True, blank=True)
+    background = models.ImageField(upload_to="event_background_img/", null=True, blank=True, help_text="image for landing page and question page")
+    question_theme = models.CharField(max_length = 100, default = "#3b273b" ,help_text = "color code for question theme")
+    button = models.CharField(max_length = 100, default = "#008080" ,help_text = "color code for submit and finish button")
+    navbar_theme = models.CharField(max_length = 100, default = "" ,help_text = "color code for question theme")
+
+    def __str__(self):
+        return BeautifulSoup(self.name).get_text()
+
+    def rules_str(self):
+        return BeautifulSoup(self.rule).get_text()

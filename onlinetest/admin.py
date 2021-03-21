@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from onlinetest.models import Question, Answer, Profile, Config
+from onlinetest.models import Question, Answer, Profile, Config, Event
 from django.contrib.admin.models import LogEntry, ADDITION, DELETION, CHANGE
 from django.urls import reverse, NoReverseMatch, path
 from django.utils.html import format_html, escape
@@ -14,7 +14,8 @@ class ProfileAdmin(admin.ModelAdmin):
         'user',
         'full_name',
         'phone',
-        'rollno',
+        # 'rollno',
+        'teamname'
         'image',
         'remarks',
         'selected',
@@ -52,7 +53,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj and (not request.user.is_superuser):
-            return ['user', 'full_name', 'rollno', 'phone']
+            return ['user', 'full_name', 'teamname', 'phone']
         else:
             return []
 
@@ -198,3 +199,4 @@ admin.site.register(Question)
 admin.site.register(Answer)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Config)
+admin.site.register(Event)

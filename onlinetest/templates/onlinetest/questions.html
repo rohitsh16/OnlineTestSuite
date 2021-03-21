@@ -17,9 +17,9 @@
 <div class="container">
     {% for question in questions %}
     <div class="row" id="q{{ question.id }}">
-        <div class="card">
+        <div class="card" style="background-color:{{event.question_theme}}"> 
 
-            <h2 class="card-heading" style="font-size: 1em !important;">{{ question.title | safe }}</h2>
+            <h2 class="card-heading" style="font-size: 1em !important; background-color:{{event.question_theme}} ;">{{ question.title | safe }}</h2>
             <div class="card-body">
                 <form method="POST" action="{{ '/answers' }}/{{ question.id }}">
                     {% csrf_token %}
@@ -28,13 +28,20 @@
                         <img src="{{ question.image.url }}" class="img-thumbnail" style="width: 300px; height: 300px;">
                     </div>
                     {% endif %}
+
+                    {% if question.audio %}
+                    <div class="sidebox border-shadow" style="padding:15px;font-size: 20px">
+                         <p>Audio Hint</p>
+                            <audio controls="" src="{{question.audio.url}}"> </audio>
+                    {% endif %}
+
                     <br /> {% if question.answer %}
                     <textarea rows="6" class="form-control" name="text"
                         placeholder="Type your answer here ...">{{ question.answer }}</textarea> {% else %}
                     <textarea rows="6" class="form-control" name="text"
                         placeholder="Type your answer here ..."></textarea> {% endif %}
                     <span class="a">
-                        <button type="submit" class="btn btn-dark submit-btn">Submit Answer</button></span>
+                        <button type="submit" class="btn btn-dark submit-btn" style="background-color:{{event.button}}">Submit Answer</button></span>
                     <span class="a">
                         {% if messages %}
                         {% for msg in messages %}
@@ -51,7 +58,7 @@
     </div>
     <br> {% endfor %}
     <div class="text-center">
-        <a href="{{ '/finish/' }}" class="btn finish-btn">Finish</a>
+        <a href="{{ '/finish/' }}" class="btn finish-btn" style="background-color:{{event.button}}">Finish</a>
     </div>
     <br>
     <br><br><br><br><br>
@@ -64,6 +71,8 @@
 <script src="{% static 'onlinetest/js/jquery.toast.min.js' %}"></script>
 
 <script>
+    document.body.style.backgroundImage="url({{ event.background.url }})";
+
     var t_left = {{ time_left }};
     console.log(t_left);
     var init_time = parseInt(t_left); // for timer element
