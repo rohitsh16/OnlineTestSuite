@@ -1,11 +1,13 @@
 {% extends 'onlinetest/base.html' %}
 
+{% block title %} {{event_name}} {% endblock %}
+
 {% block content %}
 
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'onlinetest/css/styles.css' %}">
 
-<style>
+<style>  
   @media screen and (max-width: 500px) {
     .footer {
       flex-direction: column;
@@ -14,6 +16,7 @@
     }
   }
 </style>
+
 
 <div class="main">
   <div id='content'>
@@ -88,12 +91,7 @@
 {% block js %}
 
 <script> 
-    document.body.style.backgroundImage="url({{ event.background.url }})";
-  document.addEventListener("DOMContentLoaded", () => {
-  console.log(words)
-  words = ['{{event.tagline}}']
-  console.log(words)
-  })
+  document.body.style.backgroundImage="url({{ event.background.url }})";
 </script>
 
 <script>

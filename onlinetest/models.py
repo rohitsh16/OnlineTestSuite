@@ -64,11 +64,12 @@ class Event(models.Model):
     name = HTMLField()
     rule = HTMLField(blank=True)
     tagline = models.TextField(blank=True, null=True, help_text="Logo")
-    image = models.ImageField(upload_to="event_images/", null=True, blank=True)
+    image = models.ImageField(upload_to="event_images/", null=True, blank=True, help_text="logo of the event")
     background = models.ImageField(upload_to="event_background_img/", null=True, blank=True, help_text="image for landing page and question page")
     question_theme = models.CharField(max_length = 100, default = "#3b273b" ,help_text = "color code for question theme")
     button = models.CharField(max_length = 100, default = "#008080" ,help_text = "color code for submit and finish button")
-    navbar_theme = models.CharField(max_length = 100, default = "" ,help_text = "color code for question theme")
+    navbar_theme = models.CharField(max_length = 100, default = "#3b273b" ,help_text = "color code for question theme")
+    results_msg = models.TextField(default="Results of Prelims are here!\nCongratulations to all!", blank=True)
 
     def __str__(self):
         return BeautifulSoup(self.name).get_text()
