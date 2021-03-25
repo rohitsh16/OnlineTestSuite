@@ -88,6 +88,3 @@ class TypeWriter {
     const typeWriter = new TypeWriter(txtElement, words, wait);
   });
   
-
-
-  

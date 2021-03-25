@@ -37,11 +37,13 @@ def index(req):
         image = Profile.objects.get(user=req.user).image
         curr_time = timezone.now()
         if curr_time > config.end_time and not req.user.is_staff:
-            return redirect('/finish/')
+            return redirect('/finish/', {'event': event})
         elif (curr_time > config.start_time and curr_time < config.end_time) or not Profile.objects.get(user=req.user).phone:
-            return redirect('/rules/')
+            return redirect('/rules/', {'event': event})
 
     ctx = {}
+    ctx['event'] = event
+    ctx['event_name'] = event_name
     if config.result_release_time:
         ctx['release_result'] = True
     if image:
@@ -54,15 +56,13 @@ def index(req):
         return render(req, 'onlinetest/index.html', ctx)
     ctx['time_left'] = int(config.end_time.timestamp())
     ctx['started'] = True
-    ctx['event'] = event
-    ctx['event_name'] = event_name
     return render(req, 'onlinetest/index.html', ctx)
 
 
 @login_required
 def logout_user(req):
     logout(req)
-    return redirect('/')
+    return redirect('/', {'event': Event.objects.all().first()})
 
 
 @login_required
@@ -71,9 +71,9 @@ def questions(req):
     time_left = (Config.objects.all().first().end_time - timezone.now()).total_seconds()
     event = Event.objects.all().first()
     if timezone.now() < Config.objects.all().first().start_time:
-        return redirect('/')
+        return redirect('/', {'event': event})
     if time_left <= 0:
-        return HttpResponseRedirect('/finish/', {'image': profile.image})
+        return HttpResponseRedirect('/finish/', {'image': profile.image, 'event': event})
     questions = Question.objects.all()
     answers = Answer.objects.filter(user=req.user)
     # pair up the questions with their corresponding answers
@@ -134,7 +134,7 @@ def rules(req):
     else:
         if Profile.objects.filter(user=req.user).exists() and Profile.objects.get(user=req.user).phone:
             return HttpResponseRedirect('/questions/', {})
-        ctx = {'user': req.user, 'noprofile': True, 'image': Profile.objects.get(user=req.user).image}
+        ctx = {'user': req.user, 'noprofile': True, 'image': Profile.objects.get(user=req.user).image, 'event': Event.objects.all().first()}
         if timezone.now() > Config.objects.all().first().start_time:
             ctx['started'] = True
         return render(req, 'onlinetest/rules.html', ctx)

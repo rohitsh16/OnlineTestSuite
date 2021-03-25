@@ -1,11 +1,15 @@
 {% extends 'onlinetest/base.html' %}
-
+{% block title %} {{event_name}} {% endblock %}
 {% load static %}
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'onlinetest/css/results.css' %}">
 <link rel="stylesheet" href="{% static 'onlinetest/css/footer.css' %}">
+
 <div class="b">
+    <script>
+        document.body.style.backgroundImage = "url({{ event.background.url }})";
+    </script>
     {% if not_declared %}
     <h1>Results have not been declared yet!</h1>
     <h1>Hold onto your seats!</h1>
@@ -22,9 +26,6 @@
     
     {% include 'components/footer.html' %}
 </div>
-<script>
-    document.body.style.backgroundImage="url("{{ event.background.url }}")";
-</script>
 {% endblock %}
 
 <style>

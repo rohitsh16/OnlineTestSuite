@@ -1,4 +1,6 @@
-{% extends 'onlinetest/base.html' %} {% block content %} {% load static %}
+{% extends 'onlinetest/base.html' %} 
+{% block title %} {{event_name}} {% endblock %}
+{% block content %} {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'onlinetest/css/questions.css' %}">
 
 </style>

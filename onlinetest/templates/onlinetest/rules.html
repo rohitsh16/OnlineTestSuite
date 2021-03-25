@@ -1,5 +1,5 @@
 {% extends 'onlinetest/base.html' %}
-
+{% block title %} {{event_name}} {% endblock %}
 {% load static %}
 
 {% block content %}
@@ -49,7 +49,7 @@
             <div class="form-group">
               <i class="fas fa-cube"></i>
               <input class="myInput" name="teamname" type="text" id="password" placeholder="Enter Team Name"
-                style="font-family: 'Slackey'; font-size: small;" required>
+                style="font-family: 'Slackey'; font-size: small;">
               <div class="invalid-feedback" style='font-family: "Slackey","cursive";'>Please fill out this field.</div>
             </div>
             <br><br>
@@ -68,9 +68,10 @@
 {% endblock %}
 
 <style>
-  body {
+  document.body.style.backgroundImage = "url({{ event.background.url }}) !important";
+  /* body {
     background-image: url("{% static 'onlinetest/bg.jpg' %}") !important;
-  }
+  } */
 
-  ;
+  /* ; */
 </style>
